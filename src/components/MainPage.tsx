@@ -10,10 +10,11 @@ import {
   ArrowLeft,
   Fuel as Mosque,
   Heart,
+  UserCheck,
 } from "lucide-react";
 
 interface MainPageProps {
-  onNavigate: (page: "main" | "results" | "schedule" | "news" | "donation") => void;
+  onNavigate: (page: "main" | "registration" | "results" | "schedule" | "news" | "donation") => void;
   isDarkMode?: boolean;
 }
 
@@ -222,6 +223,17 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate, isDarkMode = fal
           style={{ animationDelay: "0.6s" }}
         >
           <button
+            onClick={() => onNavigate("registration")}
+            className="group bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-green-500/25 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <UserCheck className="w-6 h-6 group-hover:animate-bounce" />
+              <span>البحث عن التسجيل</span>
+              <ArrowLeft className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </button>
+
+          <button
             onClick={() => onNavigate("schedule")}
             className="group bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
           >
@@ -234,7 +246,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onNavigate, isDarkMode = fal
 
           <button
             onClick={() => onNavigate("results")}
-            className="group bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-green-500/25 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
+            className="group bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1"
           >
             <div className="flex items-center justify-center gap-3">
               <Trophy className="w-6 h-6 group-hover:animate-bounce" />

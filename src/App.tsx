@@ -22,7 +22,7 @@ function App() {
   const [searchResult, setSearchResult] = useState<Student | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
   const [currentPage, setCurrentPage] = useState<
-    "main" | "results" | "schedule" | "news" | "donation"
+    "main" | "registration" | "results" | "schedule" | "news" | "donation"
   >("main");
   const [isDarkMode, setIsDarkMode] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -54,13 +54,13 @@ function App() {
   };
 
   const handleNavigation = (
-    page: "results" | "schedule" | "news" | "donation"
+    page: "registration" | "results" | "schedule" | "news" | "donation"
   ) => {
     setCurrentPage(page);
   };
 
   const handleFullNavigation = (
-    page: "main" | "results" | "schedule" | "news" | "donation"
+    page: "main" | "registration" | "results" | "schedule" | "news" | "donation"
   ) => {
     setCurrentPage(page);
 
@@ -73,7 +73,7 @@ function App() {
     // Scroll to top when navigating
     window.scrollTo({ top: 0, behavior: "smooth" });
     // Reset search when navigating
-    if (page !== "results") {
+    if (page !== "results" && page !== "registration") {
       setSearchResult(null);
       setSearchAttempted(false);
     }
@@ -134,127 +134,119 @@ function App() {
 
           {currentPage === "results" && (
             <>
-              <SearchSection
-                students={rankedStudents}
-                onResult={handleSearchResult}
-                isDarkMode={isDarkMode}
-              />
-
-              {/* Search Results */}
-              {searchAttempted && (
-                <section
-                  className={`py-12 transition-colors duration-300 ${
-                    isDarkMode ? "bg-gray-800" : "bg-gray-50"
-                  }`}
-                >
-                  <div className="container mx-auto px-4">
-                    <div className="max-w-2xl mx-auto">
+              {/* Contest not started message */}
+              <section
+                className={`py-12 transition-colors duration-300 ${
+                  isDarkMode ? "bg-gray-800" : "bg-gray-50"
+                }`}
+              >
+                <div className="container mx-auto px-4">
+                  <div className="max-w-2xl mx-auto">
+                    <div
+                      className={`border-2 rounded-3xl p-8 shadow-2xl relative overflow-hidden transition-colors duration-300 ${
+                        isDarkMode
+                          ? "bg-gradient-to-br from-orange-900/20 via-yellow-900/20 to-amber-900/20 border-orange-600/50"
+                          : "bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 border-orange-200"
+                      }`}
+                    >
+                      {/* Background decorative elements */}
                       <div
-                        className={`border-2 rounded-3xl p-8 shadow-2xl relative overflow-hidden transition-colors duration-300 ${
-                          isDarkMode
-                            ? "bg-gradient-to-br from-orange-900/20 via-yellow-900/20 to-amber-900/20 border-orange-600/50"
-                            : "bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 border-orange-200"
+                        className={`absolute top-4 right-4 opacity-30 ${
+                          isDarkMode ? "text-orange-400" : "text-orange-200"
                         }`}
                       >
-                        {/* Background decorative elements */}
-                        <div
-                          className={`absolute top-4 right-4 opacity-30 ${
-                            isDarkMode ? "text-orange-400" : "text-orange-200"
-                          }`}
-                        >
-                          <Clock className="w-16 h-16 animate-spin-slow" />
-                        </div>
-                        <div
-                          className={`absolute bottom-4 left-4 opacity-20 ${
-                            isDarkMode ? "text-yellow-400" : "text-yellow-200"
-                          }`}
-                        >
-                          <BookOpen className="w-12 h-12 animate-bounce-slow" />
-                        </div>
+                        <Clock className="w-16 h-16 animate-spin-slow" />
+                      </div>
+                      <div
+                        className={`absolute bottom-4 left-4 opacity-20 ${
+                          isDarkMode ? "text-yellow-400" : "text-yellow-200"
+                        }`}
+                      >
+                        <BookOpen className="w-12 h-12 animate-bounce-slow" />
+                      </div>
 
-                        <div className="text-center relative z-10">
-                          <div className="flex justify-center items-center gap-3 mb-6">
-                            <AlertCircle
-                              className={`w-12 h-12 animate-pulse ${
-                                isDarkMode
-                                  ? "text-orange-400"
-                                  : "text-orange-500"
-                              }`}
-                            />
-                            <Clock
-                              className={`w-12 h-12 animate-tick ${
-                                isDarkMode ? "text-amber-400" : "text-amber-500"
-                              }`}
-                            />
-                          </div>
-
-                          <h3
-                            className={`text-3xl md:text-4xl font-bold mb-4 animate-fadeInScale ${
-                              isDarkMode ? "text-orange-200" : "text-orange-800"
-                            }`}
-                          >
-                            المسابقة لم تبدأ بعد
-                          </h3>
-
-                          <div
-                            className={`backdrop-blur-sm rounded-2xl p-6 mb-6 border transition-colors duration-300 ${
+                      <div className="text-center relative z-10">
+                        <div className="flex justify-center items-center gap-3 mb-6">
+                          <AlertCircle
+                            className={`w-12 h-12 animate-pulse ${
                               isDarkMode
-                                ? "bg-gray-800/70 border-orange-600/30"
-                                : "bg-white/70 border-orange-100"
+                                ? "text-orange-400"
+                                : "text-orange-500"
+                            }`}
+                          />
+                          <Clock
+                            className={`w-12 h-12 animate-tick ${
+                              isDarkMode ? "text-amber-400" : "text-amber-500"
+                            }`}
+                          />
+                        </div>
+
+                        <h3
+                          className={`text-3xl md:text-4xl font-bold mb-4 animate-fadeInScale ${
+                            isDarkMode ? "text-orange-200" : "text-orange-800"
+                          }`}
+                        >
+                          المسابقة لم تبدأ بعد
+                        </h3>
+
+                        <div
+                          className={`backdrop-blur-sm rounded-2xl p-6 mb-6 border transition-colors duration-300 ${
+                            isDarkMode
+                              ? "bg-gray-800/70 border-orange-600/30"
+                              : "bg-white/70 border-orange-100"
+                          }`}
+                        >
+                          <p
+                            className={`text-lg md:text-xl leading-relaxed mb-4 ${
+                              isDarkMode
+                                ? "text-orange-200"
+                                : "text-orange-700"
                             }`}
                           >
-                            <p
-                              className={`text-lg md:text-xl leading-relaxed mb-4 ${
+                            نتائج المسابقة ستكون متاحة فور انتهاء التصحيح
+                          </p>
+                          <p
+                            className={`font-semibold ${
+                              isDarkMode
+                                ? "text-orange-300"
+                                : "text-orange-600"
+                            }`}
+                          >
+                            ترقبوا بدء المسابقة قريباً إن شاء الله
+                          </p>
+                        </div>
+
+                        <div className="text-center">
+                          <div
+                            className={`inline-flex items-center gap-2 px-6 py-3 rounded-full border transition-colors duration-300 ${
+                              isDarkMode
+                                ? "bg-gradient-to-r from-amber-900/30 to-orange-900/30 border-amber-600/50"
+                                : "bg-gradient-to-r from-amber-100 to-orange-100 border-amber-200"
+                            }`}
+                          >
+                            <Clock
+                              className={`w-5 h-5 animate-tick ${
                                 isDarkMode
-                                  ? "text-orange-200"
-                                  : "text-orange-700"
+                                  ? "text-amber-400"
+                                  : "text-amber-600"
                               }`}
-                            >
-                              نتائج المسابقة ستكون متاحة فور انتهاء التصحيح
-                            </p>
-                            <p
+                            />
+                            <span
                               className={`font-semibold ${
                                 isDarkMode
-                                  ? "text-orange-300"
-                                  : "text-orange-600"
+                                  ? "text-amber-200"
+                                  : "text-amber-800"
                               }`}
                             >
                               ترقبوا بدء المسابقة قريباً إن شاء الله
-                            </p>
-                          </div>
-
-                          <div className="text-center">
-                            <div
-                              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full border transition-colors duration-300 ${
-                                isDarkMode
-                                  ? "bg-gradient-to-r from-amber-900/30 to-orange-900/30 border-amber-600/50"
-                                  : "bg-gradient-to-r from-amber-100 to-orange-100 border-amber-200"
-                              }`}
-                            >
-                              <Clock
-                                className={`w-5 h-5 animate-tick ${
-                                  isDarkMode
-                                    ? "text-amber-400"
-                                    : "text-amber-600"
-                                }`}
-                              />
-                              <span
-                                className={`font-semibold ${
-                                  isDarkMode
-                                    ? "text-amber-200"
-                                    : "text-amber-800"
-                                }`}
-                              >
-                                ترقبوا بدء المسابقة قريباً إن شاء الله
-                              </span>
-                            </div>
+                            </span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </section>
-              )}
+                </div>
+              </section>
 
               <StatsSection stats={stats} isDarkMode={isDarkMode} />
               <AllResultsSection
@@ -262,6 +254,10 @@ function App() {
                 isDarkMode={isDarkMode}
               />
             </>
+          )}
+
+          {currentPage === "registration" && (
+            <RegistrationPage isDarkMode={isDarkMode} />
           )}
 
           {currentPage === "schedule" && (

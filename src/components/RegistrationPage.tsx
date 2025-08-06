@@ -64,6 +64,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({ isDarkMode =
   const [searchResult, setSearchResult] = useState<Reciter | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
   const [totalStudents, setTotalStudents] = useState(0);
 
   useEffect(() => {
@@ -88,14 +89,26 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({ isDarkMode =
   };
 
   const handleSearch = async () => {
+    // Reset previous states
+    setSearchError('');
+    setSearchResult(null);
+    setSearchAttempted(false);
+    
+    // Validate search term length
     if (!searchTerm.trim()) {
-      setSearchResult(null);
-      setSearchAttempted(false);
+      setSearchError('يرجى إدخال اسم للبحث');
+      return;
+    }
+    
+    if (searchTerm.trim().length < 3) {
+      setSearchError('يجب أن يكون الاسم 3 أحرف على الأقل');
       return;
     }
 
     setIsLoading(true);
-    setSearchAttempted(true);
+    
+    // Add a small delay to prevent flickering
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     try {
       const { data, error } = await supabase
@@ -108,14 +121,17 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({ isDarkMode =
       if (error && error.code !== 'PGRST116') {
         console.error('Search error:', error);
         setSearchResult(null);
+        setSearchError('حدث خطأ في البحث، يرجى المحاولة مرة أخرى');
       } else {
         setSearchResult(data || null);
       }
     } catch (error) {
       console.error('Search error:', error);
       setSearchResult(null);
+      setSearchError('حدث خطأ في البحث، يرجى المحاولة مرة أخرى');
     } finally {
       setIsLoading(false);
+      setSearchAttempted(true);
     }
   };
 
@@ -180,7 +196,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({ isDarkMode =
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="ادخل اسم طالب القرآن للبحث..."
+                    placeholder="ادخل اسم طالب القرآن للبحث (3 أحرف على الأقل)..."
                     className={`flex-1 px-6 py-4 text-right focus:outline-none text-lg transition-colors duration-300 ${
                       isDarkMode 
                         ? 'bg-gray-800 text-gray-100 placeholder-gray-400' 
@@ -215,8 +231,22 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({ isDarkMode =
               </button>
             </div>
 
+            {/* Search Error */}
+            {searchError && (
+              <div className={`mb-6 p-4 rounded-xl border-2 text-center animate-fadeIn ${
+                isDarkMode 
+                  ? 'bg-red-900/30 border-red-600/50 text-red-300' 
+                  : 'bg-red-100 border-red-300 text-red-700'
+              }`}>
+                <div className="flex items-center justify-center gap-2">
+                  <AlertTriangle className="w-5 h-5" />
+                  <span className="font-semibold">{searchError}</span>
+                </div>
+              </div>
+            )}
+
             {/* Search Results */}
-            {searchAttempted && (
+            {searchAttempted && !searchError && (
               <div className="animate-fadeIn">
                 {searchResult ? (
                   /* Student Found */
